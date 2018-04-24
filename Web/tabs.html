@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Winner</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+  <h2>Winner - A Contest of Contests</h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+    <li><a data-toggle="tab" href="#results">Results</a></li>
+    <li><a data-toggle="tab" href="#contests">Contests</a></li>
+    <li><a data-toggle="tab" href="#about">About Winner</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <h3>HOME</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <script type="text/javascript">
+
+        var sampleSVG = d3.select("#home")
+            .append("svg")
+            .attr("width", 100)
+            .attr("height", 100);    
+
+        sampleSVG.append("circle")
+            .style("stroke", "gray")
+            .style("fill", "white")
+            .attr("r", 40)
+            .attr("cx", 50)
+            .attr("cy", 50)
+            .on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+            .on("mouseout", function(){d3.select(this).style("fill", "white");});
+    </script>
+
+    </div>
+    <div id="results" class="tab-pane fade">
+      <h3>Results</h3>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <script type="text/javascript">
+
+    // Data from file
+
+    d3.text("auto_mpg_tmp.csv", function(datasetText) {
+
+    var parsedCSV = d3.csv.parseRows(datasetText);
+
+    var sampleHTML = d3.select("#results")
+        .append("table")
+        .style("border-collapse", "collapse")
+        .style("border", "2px black solid")
+
+        .selectAll("tr")
+        .data(parsedCSV)
+        .enter().append("tr")
+
+        .selectAll("td")
+        .data(function(d){return d;})
+        .enter().append("td")
+        .style("border", "1px black solid")
+        .style("padding", "5px")
+        .on("mouseover", function(){d3.select(this).style("background-color", "aliceblue")})
+        .on("mouseout", function(){d3.select(this).style("background-color", "white")})
+        .text(function(d){return d;})
+        .style("font-size", "12px");
+    });
+    </script>
+    </div>
+    <div id="contests" class="tab-pane fade">
+      <h3>Contests</h3>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+    </div>
+    <div id="about" class="tab-pane fade">
+      <h3>About</h3>
+      <p>Winner is a contest of contests. Everyone can define their own contests using python. Writing your own user defined contest is simple. Several templates are available and the source code to all contests are posted online. What are you waiting for?</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+

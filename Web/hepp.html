@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>W3.CSS Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    <!--<script src="https://d3js.org/d3.v4.min.js"></script>
+-->
+    <style>
+        html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+        .w3-sidebar {
+          z-index: 3;
+          width: 250px;
+          top: 43px;
+          bottom: 0;
+          height: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top w3-black">
+  <a href="#home" class="w3-bar-item w3-button w3-mobile">Home</a>
+  <a href="#results" class="w3-bar-item w3-button w3-mobile">Results</a>
+  <a href="#contests" class="w3-bar-item w3-button w3-mobile">Contests</a>
+  <a href="#about" class="w3-bar-item w3-button w3-mobile">About</a>
+</div>
+
+
+<div class="w3-main">
+
+  <div class="w3-row w3-padding-64" id="home">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Winner - the champion of champions</h1>
+      <p>Here are the current leader board. If you're unhappy with you not being part of it either train harder (or perhaps just more optimally based on the contests) or make you own contest based on something you you think you're good at.</p>
+
+<svg width="100%" height="500px"></svg>
+<script>
+
+  // SETUP
+
+  var svg = d3.select("svg"),
+    margin = { top: 20, right: 20, bottom: 30, left: 40 },
+    x = d3.scaleBand().padding(0.1),
+    y = d3.scaleLinear(),
+    theData = undefined;
+
+  var g = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  g.append("g")
+    .attr("class", "axis axis--x");
+
+  g.append("g")
+    .attr("class", "axis axis--y");
+
+
+  // DRAWING
+
+  function draw() {
+
+    var bounds = svg.node().getBoundingClientRect(),
+      width = bounds.width - margin.left - margin.right,
+      height = bounds.height - margin.top - margin.bottom;
+
+    x.rangeRound([0, width]);
+    y.rangeRound([height, 0]);
+
+    g.select(".axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    //g.select(".axis--y")
+    //  .call(d3.axisLeft(y).ticks(10, "%"));
+
+    var bars = g.selectAll(".bar")
+      .data(theData);
+
+    // ENTER
+    bars
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function (d) { return x(d.user); })
+      .attr("y", function (d) { return y(d.height_of_podium); })
+      .attr("width", x.bandwidth())
+      .attr("height", function (d) { return height - y(d.height_of_podium); });
+
+    // UPDATE
+    bars.attr("x", function (d) { return x(d.user); })
+      //.attr("y", function (d) { return y(d.height_of_podium); })
+      .attr("width", x.bandwidth())
+      .attr("height", function (d) { return height - y(d.height_of_podium); });
+
+    // EXIT
+    bars.exit()
+      .remove();
+
+  }
+
+  // LOADING DATA
+
+  function loadData(tsvFile) {
+
+    d3.tsv(tsvFile, function (d) {
+      d.height_of_podium = +d.height_of_podium;
+      return d;
+
+    }, function (error, data) {
+      if (error) throw error;
+
+      theData = data;
+
+      x.domain(theData.map(function (d) { return d.user; }));
+      y.domain([0, d3.max(theData, function (d) { return d.height_of_podium; })]);
+
+      draw();
+
+    });
+  }
+
+  // START!
+  
+  window.addEventListener("resize", draw);
+  loadData("leader_board.tsb");
+
+</script>
+
+    </div>
+    <div class="w3-third w3-container">
+      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+    </div>
+  </div>
+
+  <div class="w3-row w3-padding-64" id="results">
+    <div class="w3-twothird w3-container" id="results_container">
+      <h1 class="w3-text-teal">Results</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
+        dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <script type="text/javascript">
+
+    // Data from file
+
+    d3.text("auto_mpg_tmp.csv", function(datasetText) {
+
+    var parsedCSV = d3.csv.parseRows(datasetText);
+
+    var sampleHTML = d3.select("#results_container")
+        .append("table")
+        .style("border-collapse", "collapse")
+        .style("border", "2px black solid")
+
+        .selectAll("tr")
+        .data(parsedCSV)
+        .enter().append("tr")
+
+        .selectAll("td")
+        .data(function(d){return d;})
+        .enter().append("td")
+        .style("border", "1px black solid")
+        .style("padding", "5px")
+        .on("mouseover", function(){d3.select(this).style("background-color", "aliceblue")})
+        .on("mouseout", function(){d3.select(this).style("background-color", "white")})
+        .text(function(d){return d;})
+        .style("font-size", "12px");
+    });
+    </script>
+
+    </div>
+    <div class="w3-third w3-container">
+      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+    </div>
+  </div>
+
+  <div class="w3-row w3-padding-64" id="contests">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Contests</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum
+        dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <div class="w3-third w3-container">
+      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+    </div>
+  </div>
+
+  <div class="w3-row w3-padding-64" id="about">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">About</h1>
+      <p>Winner is a contest of contests. Everyone can define their own contests using python. Writing your own user defined contest is simple. Several templates are available and the source code to all contests are posted online. What are you waiting for?</p>
+    </div>
+    <div class="w3-third w3-container">
+      <p class="w3-border w3-padding-large w3-padding-32 w3-center">AD</p>
+      <p class="w3-border w3-padding-large w3-padding-64 w3-center">AD</p>
+    </div>
+  </div>
+
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+      <h4>Footer</h4>
+    </div>
+
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+
+<script>
+function openLink(evt, animName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+     tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+  }
+  document.getElementById(animName).style.display = "block";
+  evt.currentTarget.className += " w3-red";
+}
+</script>
+
+</body>
+</html>
+
